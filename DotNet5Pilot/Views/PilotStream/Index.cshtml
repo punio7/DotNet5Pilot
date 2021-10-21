@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@section Scripts {
+    <script src="~/js/audioPlayer.js"></script>
+    <script src="~/js/pilotStream.js"></script>
+}
+
+
+<div id="audioPlayer">
+    <audio controls>
+        <source src="" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="playlistHeading" data-toggle="collapse" data-target="#playlistContainer" aria-expanded="true" aria-controls="playlistContainer">
+                <h5 class="mb-0">
+                    Playlista
+                </h5>
+            </div>
+            <div id="playlistContainer" class="collapse show" aria-labelledby="playlistHeading" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <input type="search" class="form-control playlist-filter" placeholder="Filtruj"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Lp</th>
+                                            <th>Tytuł</th>
+                                            <th>Artysta</th>
+                                            <th>Album</th>
+                                            <th>Czas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="playlist-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
