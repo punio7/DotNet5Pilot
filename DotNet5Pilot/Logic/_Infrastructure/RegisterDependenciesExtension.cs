@@ -1,7 +1,7 @@
 ﻿using DotNet5Pilot.Logic.Factories;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DotNet5Pilot.Logic._Dependencies
+namespace DotNet5Pilot.Logic._Infrastructure
 {
     public static class RegisterDependenciesExtension
     {

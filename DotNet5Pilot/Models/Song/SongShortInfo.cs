@@ -1,4 +1,4 @@
-﻿namespace DotNet5Pilot.Models
+﻿namespace DotNet5Pilot.Models.Song
 {
     public class SongShortInfo
     {

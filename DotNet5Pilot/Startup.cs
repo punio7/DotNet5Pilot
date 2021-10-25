@@ -1,4 +1,4 @@
-using DotNet5Pilot.Logic._Dependencies;
+using DotNet5Pilot.Logic._Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +20,7 @@ namespace DotNet5Pilot
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddConfiguration(Configuration);
             services.RegisterDependencies();
         }
 

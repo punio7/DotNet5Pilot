@@ -1,0 +1,51 @@
+﻿.song-cover {
+    width: 250px;
+    height: 250px;
+}
+
+.karaoke {
+    position: absolute;
+    top: 5px;
+    width: 250px;
+    height: 240px;
+    font-weight: bold;
+    color: lightblue;
+    text-align: center;
+    overflow-y: hidden;
+}
+
+.karaoke div {
+    font-size: 15px;
+    text-shadow: 2px 2px Black;
+}
+
+.karaoke-current-line {
+    color: lightcoral;
+}
+
+.karaoke-background {
+    filter: brightness(50%);
+}
+
+.input-group > .input-group-prepend {
+    flex: 0 0 25%;
+}
+
+.input-group .input-group-text {
+    width: 100%;
+}
+
+.form-control[readonly] {
+    background-color: white;
+}
+
+.input-group-text {
+    background-color: #007bff;
+    color: white;
+}
+
+.card-header {
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}

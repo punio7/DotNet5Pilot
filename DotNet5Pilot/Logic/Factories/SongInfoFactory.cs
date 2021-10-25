@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DotNet5Pilot.Models;
+using DotNet5Pilot.Models.Song;
 using TagLib;
 
 namespace DotNet5Pilot.Logic.Factories

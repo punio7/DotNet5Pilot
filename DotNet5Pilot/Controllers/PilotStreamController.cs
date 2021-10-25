@@ -24,11 +24,12 @@ namespace DotNet5Pilot.Controllers
 
         public IActionResult Info(int id)
         {
-            if (!playlistManager.IsSongIdValid(id))
+            var songInfo = playlistManager.GetSongInfo(id);
+            if (songInfo == null)
             {
                 return NotFound();
             }
-            return Json(playlistManager.GetSongInfo(id));
+            return Json(songInfo);
         }
     }
 }

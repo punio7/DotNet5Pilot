@@ -1,4 +1,4 @@
-﻿namespace Pilot.Models
+﻿namespace Pilot.Models.Song
 {
     public class Lyric
     {

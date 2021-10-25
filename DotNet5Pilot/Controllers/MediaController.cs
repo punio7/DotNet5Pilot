@@ -15,12 +15,11 @@ namespace DotNet5Pilot.Controllers
         [HttpGet]
         public ActionResult Stream(int id)
         {
-            if (!playlistManager.IsSongIdValid(id))
+            string filePath = playlistManager.GetSongFilePath(id);
+            if (filePath == null)
             {
                 return NotFound();
             }
-
-            string filePath = playlistManager.Playlist[id].Path;
             
             return PhysicalFile(filePath, "application/octet-stream", enableRangeProcessing: true);
         }

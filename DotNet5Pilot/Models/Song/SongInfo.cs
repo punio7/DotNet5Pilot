@@ -1,4 +1,5 @@
-﻿using Pilot.Models;
+﻿using DotNet5Pilot.Models.Song;
+using Pilot.Models.Song;
 
 namespace DotNet5Pilot.Models
 {

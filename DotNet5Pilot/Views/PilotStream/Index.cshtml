@@ -4,19 +4,86 @@
 @{
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/PilotStream.css" />
+}
+
 @section Scripts {
     <script src="~/js/audioPlayer.js"></script>
     <script src="~/js/pilotStream.js"></script>
 }
 
+<div id="audioPlayer" class="container">
 
-<div id="audioPlayer">
-    <audio controls>
-        <source src="" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <img id="songImage" class="media-object song-cover" src="~/images/noImage.png" />
+            <div id="karaokeBox" class="karaoke">
+            </div>
+            <div class="row">&nbsp;</div>
+        </div>
+        <div class="col-sm-12 col-md-8 col-lg-9">
+            <div class="container">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span id="songTrackAddon" class="input-group-text">Ścieżka</span>
+                    </div>
+                    <input type="text" readonly class="form-control" id="songTrack" aria-describedby="songTrackAddon" value="">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span id="songTitleAddon" class="input-group-text">Tytuł</span>
+                    </div>
+                    <input type="text" readonly class="form-control" id="songTitle" aria-describedby="songTitleAddon" value="">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span id="songArtistAddon" class="input-group-text">Wykonawca</span>
+                    </div>
+                    <input type="text" readonly class="form-control" id="songArtist" aria-describedby="songArtistAddon" value="">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span id="songAlbumAddon" class="input-group-text">Album</span>
+                    </div>
+                    <input type="text" readonly class="form-control" id="songAlbum" aria-describedby="songAlbumAddon" value="">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span id="songYearAddon" class="input-group-text">Rok</span>
+                    </div>
+                    <input type="text" readonly class="form-control" id="songYear" aria-describedby="songYearAddon" value="">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span id="songGenereAddon" class="input-group-text">Gatunek</span>
+                    </div>
+                    <input type="text" readonly class="form-control" id="songGenere" aria-describedby="songGenereAddon" value="">
+                </div>
+            </div>
 
-    <div id="accordion">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button id="mediaButton" class="btn btn-outline-primary"><i class="fa fa-music"></i></button>
+            <button id="playButton" class="btn btn-outline-primary"><i class="fa fa-play"></i> / <i class="fa fa-pause"></i></button>
+            <button id="prevButton" class="btn btn-outline-primary"><i class="fa fa-backward"></i></button>
+            <button id="nextButton" class="btn btn-outline-primary"><i class="fa fa-forward"></i></button>
+            <button id="stopButton" class="btn btn-outline-primary"><i class="fa fa-stop"></i></button>
+            <button id="repeatButton" class="btn btn-outline-primary"><i class="fa fa-sync"></i></button>
+            <button id="randomButton" class="btn btn-outline-primary"><i class="fa fa-random"></i></button>
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <audio controls>
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div id="accordion" class="row">
         <div class="card">
             <div class="card-header" id="playlistHeading" data-toggle="collapse" data-target="#playlistContainer" aria-expanded="true" aria-controls="playlistContainer">
                 <h5 class="mb-0">
@@ -28,24 +95,26 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <input type="search" class="form-control playlist-filter" placeholder="Filtruj"/>
+                                <input type="search" class="form-control playlist-filter" placeholder="Filtruj" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Lp</th>
-                                            <th>Tytuł</th>
-                                            <th>Artysta</th>
-                                            <th>Album</th>
-                                            <th>Czas</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="playlist-body">
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Lp</th>
+                                                <th>Tytuł</th>
+                                                <th>Artysta</th>
+                                                <th>Album</th>
+                                                <th>Czas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="playlist-body">
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

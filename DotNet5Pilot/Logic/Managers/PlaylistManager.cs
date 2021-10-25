@@ -4,6 +4,7 @@ using System.Linq;
 using DotNet5Pilot.Logic.Factories;
 using DotNet5Pilot.Logic.Utils;
 using DotNet5Pilot.Models;
+using DotNet5Pilot.Models.Song;
 
 namespace DotNet5Pilot.Logic
 {
@@ -12,7 +13,6 @@ namespace DotNet5Pilot.Logic
         private readonly SongInfoFactory songInfoFactory;
         private readonly HashSet<string> acceptableExtensions = new() { ".mp3", ".flac" };
         private readonly Cache<int, SongInfo> songInfoCache = new();
-
 
         public List<SongShortInfo> Playlist { get; set; } = new();
 
@@ -56,13 +56,27 @@ namespace DotNet5Pilot.Logic
             int id = 0;
             newPlaylist.ForEach(si => si.Id = id++);
         }
+
         public bool IsSongIdValid(int id)
         {
-            return id > 0 && id < Playlist.Count;
+            return id >= 0 && id < Playlist.Count;
+        }
+
+        public string GetSongFilePath(int songId)
+        {
+            if (!IsSongIdValid(songId))
+            {
+                return null;
+            }
+            return Playlist[songId].Path;
         }
 
         public SongInfo GetSongInfo(int songId)
         {
+            if (!IsSongIdValid(songId))
+            {
+                return null;
+            }
             if (songInfoCache.TryGet(songId, out SongInfo songInfo))
             {
                 return songInfo;

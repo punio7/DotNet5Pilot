@@ -7,6 +7,14 @@
         this.playlistBody = $(audioPlayerSelector + ' .playlist-body');
         this.playlistFilter = $(audioPlayerSelector + ' .playlist-filter');
 
+        this.mediaButton = $('#mediaButton');
+        this.playButton = $('#playButton');
+        this.prevButton = $('#prevButton');
+        this.nextButton = $('#nextButton');
+        this.stopButton = $('#stopButton');
+        this.repeatButton = $('#repeatButton');
+        this.randomButton = $('#randomButton');
+
         this.playlist = [];
         this.filteredPlaylist = [];
 
@@ -18,6 +26,7 @@
     attachActions() {
         this.playlistFilter.on('input', () => { this.onFilterChange(); });
         this.audio.on('ended', () => { this.playNext(); });
+        this.playButton.click(() => this.playPause());
     }
 
     loadPlaylist(data) {
@@ -44,6 +53,15 @@
         })
     }
 
+    playPause() {
+        if (this.audioDom.paused) {
+            this.audioDom.play();
+        }
+        else {
+            this.audioDom.pause();
+        }
+    }
+
     playNext() {
         var nextSongId = (this.currentlyPlaying + 1) % this.playlist.length;
         this.playSong(nextSongId);
@@ -55,6 +73,30 @@
         this.audioDom.load();
         this.audioDom.play();
         this.markCurrentlyPlayig();
+        ajaxAction('Info/' + songId, (data) => {
+            this.loadSongInfo(data);
+        })
+    }
+
+    loadSongInfo(songInfo) {
+        this.updateTagField("#songTitle", songInfo.title);
+        this.updateTagField("#songArtist", songInfo.artist);
+        this.updateTagField("#songAlbum", songInfo.album);
+        this.updateTagField("#songTrack", songInfo.track);
+        this.updateTagField("#songYear", songInfo.year);
+        this.updateTagField("#songGenere", songInfo.genere);
+        $('#songImage').attr('src', 'data:image/png;base64,' + songInfo.image);
+    }
+
+    updateTagField(selector, value) {
+        if (value === undefined || value === null || value === "") {
+            $(selector).parent().hide();
+            $(selector).val("");
+        }
+        else {
+            $(selector).parent().show();
+            $(selector).val(value);
+        }
     }
 
     markCurrentlyPlayig() {
