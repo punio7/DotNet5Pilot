@@ -1,4 +1,4 @@
-﻿class Karaoke {
+﻿class karaoke {
     constructor(karaokeBoxSelector) {
         this.karaokeBox = $('#karaokeBox');
         this.timeout = null;
@@ -8,10 +8,11 @@
         this.offset = 500;
     }
 
-    loadKaraoke() {
+    load(lyrics) {
         this.karaokeBox.empty();
         $('#songImage').removeClass('karaoke-background');
-        if (this.lyrics != null) {
+        if (lyrics != null) {
+            this.lyrics = lyrics;
             $('#songImage').addClass('karaoke-background');
             this.karaokeBox.append('<div style="height:112px;">&nbsp;</div>');
             this.lyrics.forEach((lyric) => {
@@ -20,51 +21,51 @@
         }
     }
 
-    startKaraoke() {
-        this.resetKaraoke();
+    start() {
+        this.reset();
         if (this.lyrics != null) {
-            this.karaokeLineCount = lyrics.length;
+            this.karaokeLineCount = this.lyrics.length;
             var milliseconds = this.lyrics[0].milliseconds;
             if (milliseconds > this.offset) {
                 milliseconds -= this.offset;
             }
-            this.karaokeQueueNextLine(milliseconds);
+            this.queueNextLine(milliseconds);
         }
     }
 
-    resetKaraoke() {
+    reset() {
         if (this.timeout !== null) {
             window.clearTimeout(this.timeout);
         }
         this.currentLine = 0;
         this.karaokeLineCount = 0;
-        this.karaokeScroll(0);
+        this.scroll(0);
     }
 
-    karaokeNextLine() {
+    nextLine() {
         if (this.currentLine > this.karaokeLineCount) {
             return;
         }
         this.currentLine++;
         var millisecondsDifference =
-            this.lyrics[currentLine].milliseconds - this.lyrics[currentLine - 1].milliseconds;
-        this.karaokeQueueNextLine(millisecondsDifference);
-        this.karaokeGoToLine(this.currentLine);
+            this.lyrics[this.currentLine].milliseconds - this.lyrics[this.currentLine - 1].milliseconds;
+        this.queueNextLine(millisecondsDifference);
+        this.goToLine(this.currentLine);
     }
 
-    karaokeQueueNextLine(miliseconds) {
-        this.timeout = window.setTimeout(karaokeNextLine, miliseconds);
+    queueNextLine(miliseconds) {
+        this.timeout = window.setTimeout(() => this.nextLine(), miliseconds);
     }
 
-    karaokeGoToLine(newLine) {
+    goToLine(newLine) {
         this.karaokeBox.find('div:nth-child(' + newLine + ')').removeClass('karaoke-current-line');
         var currentLineElement = $('#karaokeBox div:nth-child(' + (newLine + 1) + ')');
         currentLineElement.addClass('karaoke-current-line');
         var newPosition = currentLineElement[0].offsetTop - 112;
-        this.karaokeScroll(newPosition);
+        this.scroll(newPosition);
     }
 
-    karaokeScroll(topPixels) {
+    scroll(topPixels) {
         this.karaokeBox[0].scroll({
             top: topPixels,
             left: 0,

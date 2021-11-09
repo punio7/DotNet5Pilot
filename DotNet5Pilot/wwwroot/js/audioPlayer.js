@@ -15,6 +15,8 @@
         this.repeatButton = $('#repeatButton');
         this.randomButton = $('#randomButton');
 
+        this.karaoke = new karaoke('#karaokeBox');
+
         this.playlist = [];
         this.filteredPlaylist = [];
 
@@ -71,10 +73,11 @@
         this.currentlyPlaying = songId;
         this.audioSource.attr('src', '/Media/Stream/' + songId + "?" + new Date().getTime());
         this.audioDom.load();
-        this.audioDom.play();
-        this.markCurrentlyPlayig();
         ajaxAction('Info/' + songId, (data) => {
             this.loadSongInfo(data);
+            this.audioDom.play();
+            this.markCurrentlyPlayig();
+            this.karaoke.start();
         })
     }
 
@@ -86,6 +89,7 @@
         this.updateTagField("#songYear", songInfo.year);
         this.updateTagField("#songGenere", songInfo.genere);
         $('#songImage').attr('src', 'data:image/png;base64,' + songInfo.image);
+        this.karaoke.load(songInfo.lyrics);
     }
 
     updateTagField(selector, value) {

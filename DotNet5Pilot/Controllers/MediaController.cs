@@ -1,4 +1,4 @@
-﻿using DotNet5Pilot.Logic;
+﻿using DotNet5Pilot.Logic.Managers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNet5Pilot.Controllers

@@ -1,4 +1,5 @@
 ﻿using DotNet5Pilot.Logic.Factories;
+using DotNet5Pilot.Logic.Managers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNet5Pilot.Logic._Infrastructure
@@ -9,6 +10,7 @@ namespace DotNet5Pilot.Logic._Infrastructure
         {
             services.AddSingleton(typeof(PlaylistManager));
             services.AddSingleton(typeof(SongInfoFactory));
+            services.AddSingleton(typeof(LyricsManager));
         }
     }
 }

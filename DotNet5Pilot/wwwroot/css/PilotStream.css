@@ -12,6 +12,7 @@
     color: lightblue;
     text-align: center;
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .karaoke div {

@@ -4,28 +4,33 @@ using System.Linq;
 using DotNet5Pilot.Logic.Factories;
 using DotNet5Pilot.Logic.Utils;
 using DotNet5Pilot.Models;
+using DotNet5Pilot.Models.Configuration;
 using DotNet5Pilot.Models.Song;
+using Microsoft.Extensions.Options;
 
-namespace DotNet5Pilot.Logic
+namespace DotNet5Pilot.Logic.Managers
 {
     public class PlaylistManager
     {
         private readonly SongInfoFactory songInfoFactory;
+        private readonly LyricsManager lyricsManager;
+        private readonly PilotConfiguration configuration;
         private readonly HashSet<string> acceptableExtensions = new() { ".mp3", ".flac" };
         private readonly Cache<int, SongInfo> songInfoCache = new();
 
         public List<SongShortInfo> Playlist { get; set; } = new();
 
-        public PlaylistManager(SongInfoFactory songInfoFactory)
+        public PlaylistManager(SongInfoFactory songInfoFactory, LyricsManager lyricsManager, IOptions<PilotConfiguration> configuration)
         {
             this.songInfoFactory = songInfoFactory;
+            this.lyricsManager = lyricsManager;
+            this.configuration = configuration.Value;
             LoadDefaultFolder();
         }
 
         private void LoadDefaultFolder()
         {
-            string defaultFolder = @"\\punio-desktop\muzyka\Besty";
-            LoadFolder(defaultFolder);
+            LoadFolder(configuration.DefaultFolder);
         }
 
         public void LoadFolder(string folder)
@@ -82,6 +87,7 @@ namespace DotNet5Pilot.Logic
                 return songInfo;
             }
             SongInfo newSongInfo = songInfoFactory.CreateSongInfo(Playlist[songId].Path);
+            lyricsManager.LoadLyrics(newSongInfo);
             return songInfoCache.AddOrGetExisting(songId, newSongInfo);
         }
     }

@@ -108,6 +108,10 @@ namespace DotNet5Pilot.Logic.Factories
 
         private static string GetAlbumArtist(File tagFile)
         {
+            if (!string.IsNullOrEmpty(tagFile.Tag.FirstPerformer))
+            {
+                return tagFile.Tag.FirstPerformer;
+            }
             if (!string.IsNullOrEmpty(tagFile.Tag.FirstAlbumArtist))
             {
                 return tagFile.Tag.FirstAlbumArtist;
