@@ -1,7 +1,22 @@
 ﻿var player;
 
+//window['__onGCastApiAvailable'] = function (isAvailable) {
+//    if (isAvailable) {
+//        initializeCastApi();
+//    }
+//};
+
+//initializeCastApi = function () {
+//    cast.framework.CastContext.getInstance().setOptions({
+//        androidReceiverCompatible: false,
+//        receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+//        autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+//    });
+//};
+
 $(document).ready(() => {
     player = new audioPlayer('#audioPlayer');
+    ajaxAction('Info/-1', (data) => { player.emptySong = data; player.stopPlaying() });
     ajaxAction('List', (data) => { player.loadPlaylist(data) });
 });
 

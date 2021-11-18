@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using DotNet5Pilot.Models;
 using DotNet5Pilot.Models.Configuration;
+using DotNet5Pilot.Models.Song;
 using Microsoft.Extensions.Options;
-using Pilot.Models.Song;
 
 namespace DotNet5Pilot.Logic.Managers
 {

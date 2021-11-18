@@ -9,6 +9,7 @@
 }
 
 @section Scripts {
+    <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
     <script src="~/js/karaoke.js"></script>
     <script src="~/js/audioPlayer.js"></script>
     <script src="~/js/pilotStream.js"></script>
@@ -18,7 +19,7 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-3">
-            <img id="songImage" class="media-object song-cover" src="~/images/noImage.png" />
+            <img id="songImage" class="media-object song-cover" src="" />
             <div id="karaokeBox" class="karaoke">
             </div>
             <div class="row">&nbsp;</div>
@@ -74,6 +75,7 @@
             <button id="stopButton" class="btn btn-outline-primary"><i class="fa fa-stop"></i></button>
             <button id="repeatButton" class="btn btn-outline-primary"><i class="fa fa-sync"></i></button>
             <button id="randomButton" class="btn btn-outline-primary"><i class="fa fa-random"></i></button>
+            <button id="screencastButton" is="google-cast-button" class="btn btn-outline-primary"><i class="fab fa-chromecast"></i></button>
         </div>
     </div>
     <div class="row">&nbsp;</div>

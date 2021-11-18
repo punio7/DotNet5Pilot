@@ -1,7 +1,4 @@
-﻿using DotNet5Pilot.Models.Song;
-using Pilot.Models.Song;
-
-namespace DotNet5Pilot.Models
+﻿namespace DotNet5Pilot.Models.Song
 {
     public class SongInfo : SongShortInfo
     {

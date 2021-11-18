@@ -1,4 +1,4 @@
-﻿namespace Pilot.Models.Song
+﻿namespace DotNet5Pilot.Models.Song
 {
     public class Lyric
     {

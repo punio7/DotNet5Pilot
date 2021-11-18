@@ -25,10 +25,6 @@ namespace DotNet5Pilot.Controllers
         public IActionResult Info(int id)
         {
             var songInfo = playlistManager.GetSongInfo(id);
-            if (songInfo == null)
-            {
-                return NotFound();
-            }
             return Json(songInfo);
         }
     }

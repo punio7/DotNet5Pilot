@@ -7,7 +7,7 @@ namespace DotNet5Pilot.Logic.Factories
 {
     public class SongInfoFactory
     {
-        private readonly SongInfo emptySong = new()
+        public SongInfo EmptySong { get; } = new()
         {
             Path = string.Empty,
             Track = null,
@@ -56,8 +56,8 @@ namespace DotNet5Pilot.Logic.Factories
         {
             if (picture == null || picture.Data == null)
             {
-                songInfo.Image = emptySong.Image;
-                songInfo.ImageMimeType = emptySong.ImageMimeType;
+                songInfo.Image = EmptySong.Image;
+                songInfo.ImageMimeType = EmptySong.ImageMimeType;
             }
             else
             {

@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using DotNet5Pilot.Logic.Factories;
 using DotNet5Pilot.Logic.Utils;
-using DotNet5Pilot.Models;
 using DotNet5Pilot.Models.Configuration;
 using DotNet5Pilot.Models.Song;
 using Microsoft.Extensions.Options;
@@ -80,7 +79,7 @@ namespace DotNet5Pilot.Logic.Managers
         {
             if (!IsSongIdValid(songId))
             {
-                return null;
+                return songInfoFactory.EmptySong;
             }
             if (songInfoCache.TryGet(songId, out SongInfo songInfo))
             {

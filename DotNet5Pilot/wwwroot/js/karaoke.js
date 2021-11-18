@@ -2,17 +2,17 @@
     constructor(karaokeBoxSelector) {
         this.karaokeBox = $('#karaokeBox');
         this.timeout = null;
-        this.currentLine = 0;
-        this.karaokeLineCount = 0;
+        this.currentLine = -1;
         this.lyrics = null;
         this.offset = 500;
+        this.stopped = true;
     }
 
     load(lyrics) {
         this.karaokeBox.empty();
         $('#songImage').removeClass('karaoke-background');
+        this.lyrics = lyrics;
         if (lyrics != null) {
-            this.lyrics = lyrics;
             $('#songImage').addClass('karaoke-background');
             this.karaokeBox.append('<div style="height:112px;">&nbsp;</div>');
             this.lyrics.forEach((lyric) => {
@@ -21,55 +21,74 @@
         }
     }
 
-    start() {
-        this.reset();
+    start(startingMilliseconds = 0) {
         if (this.lyrics != null) {
-            this.karaokeLineCount = this.lyrics.length;
-            var milliseconds = this.lyrics[0].milliseconds;
-            if (milliseconds > this.offset) {
-                milliseconds -= this.offset;
+            var startingLine = this.findStartingLyric(startingMilliseconds);
+            var milliseconds = this.lyrics[startingLine + 1].milliseconds - startingMilliseconds;
+            if (startingLine > 0 && startingLine !== this.currentLine) {
+                this.goToLine(startingLine, milliseconds);
             }
+            this.currentLine = startingLine;
+            this.stopped = false;
             this.queueNextLine(milliseconds);
         }
     }
 
+    findStartingLyric(startingMilliseconds) {
+        let startingLyricsIndex = this.lyrics.findIndex(lyr => lyr.milliseconds > startingMilliseconds);
+        return startingLyricsIndex - 1;
+    }
+
     reset() {
+        this.stop();
+        this.currentLine = -1;
+        this.scroll(0, 0);
+    }
+
+    stop() {
+        this.stopped = true;
         if (this.timeout !== null) {
             window.clearTimeout(this.timeout);
         }
-        this.currentLine = 0;
-        this.karaokeLineCount = 0;
-        this.scroll(0);
     }
 
     nextLine() {
-        if (this.currentLine > this.karaokeLineCount) {
+        if (this.stopped) {
             return;
         }
         this.currentLine++;
-        var millisecondsDifference =
-            this.lyrics[this.currentLine].milliseconds - this.lyrics[this.currentLine - 1].milliseconds;
-        this.queueNextLine(millisecondsDifference);
-        this.goToLine(this.currentLine);
+        var nextLineExists = this.currentLine + 1 < this.lyrics.length;
+
+        var millisecondsDifference = nextLineExists ?
+            this.lyrics[this.currentLine + 1].milliseconds - this.lyrics[this.currentLine].milliseconds : 2000;
+        if (nextLineExists) {
+            this.queueNextLine(millisecondsDifference);
+        }
+        this.goToLine(this.currentLine, millisecondsDifference);
     }
 
     queueNextLine(miliseconds) {
         this.timeout = window.setTimeout(() => this.nextLine(), miliseconds);
     }
 
-    goToLine(newLine) {
-        this.karaokeBox.find('div:nth-child(' + newLine + ')').removeClass('karaoke-current-line');
-        var currentLineElement = $('#karaokeBox div:nth-child(' + (newLine + 1) + ')');
+    goToLine(newLine, nextLineTime) {
+        this.karaokeBox.find('.karaoke-current-line').removeClass('karaoke-current-line');
+        var currentLineElement = $('#karaokeBox div:nth-child(' + (newLine + 2) + ')');
         currentLineElement.addClass('karaoke-current-line');
         var newPosition = currentLineElement[0].offsetTop - 112;
-        this.scroll(newPosition);
+        if (nextLineTime > 2000) {
+            this.scroll(newPosition, 1000);
+        }
+        else {
+            this.scroll(newPosition, nextLineTime / 2);
+        }
     }
 
-    scroll(topPixels) {
-        this.karaokeBox[0].scroll({
-            top: topPixels,
-            left: 0,
-            behavior: 'smooth'
+    scroll(topPixels, duration = 1000) {
+        this.karaokeBox.animate({
+            scrollTop: topPixels
+        }, {
+            duration: duration,
         });
     }
 }
