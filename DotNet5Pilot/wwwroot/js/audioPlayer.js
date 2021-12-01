@@ -55,33 +55,16 @@
         this.fillPlaylistBody(data);
     }
 
-    fillPlaylistBody(data) {
-        this.playlistBody.empty();
-        data.forEach((song) => {
-            var row = '<tr id="' + song.id + '" class="song-row"><td>' + (song.id + 1) + '</td><td>' + song.title + '</td><td>' + song.artist +
-                '</td><td>' + song.album + '</td><td>' + formatSeconds(song.length) + '</td></tr>';
-            this.playlistBody.append(row)
-        });
-        this.attachRowActions();
-        this.markCurrentlyPlayig();
-    }
-
-    attachRowActions() {
-        var audioPlayer = this;
-        this.container.find('.song-row').click(function () {
-            var songId = Number.parseInt($(this)[0].id, 10);
-            audioPlayer.playSong(songId);
-        })
-    }
-
     playPause() {
         if (this.audioDom.paused) {
             this.audioDom.play();
             this.karaoke.start(this.audioDom.currentTime * 1000);
+            this.setMediaSessionPlaybackState('pause');
         }
         else {
             this.audioDom.pause();
             this.karaoke.stop();
+            this.setMediaSessionPlaybackState('play');
         }
     }
 
@@ -132,6 +115,7 @@
         this.previousSongs.push(this.currentlyPlaying);
         this.currentlyPlaying = -1;
         this.karaoke.reset();
+        this.setMediaSessionPlaybackState('none');
     }
 
     toggleRepeat() {
@@ -178,6 +162,7 @@
     }
 
     loadSongInfo(songInfo) {
+        this.karaoke.load(songInfo.lyrics);
         this.updateTagField(this.songTitle, songInfo.title);
         this.updateTagField(this.songArtist, songInfo.artist);
         this.updateTagField(this.songAlbum, songInfo.album);
@@ -185,7 +170,21 @@
         this.updateTagField(this.songYear, songInfo.year);
         this.updateTagField(this.songGenere, songInfo.genere);
         this.songImage.attr('src', 'data:image/png;base64,' + songInfo.image);
-        this.karaoke.load(songInfo.lyrics);
+        this.updateMediaSession(songInfo);
+    }
+
+    updateMediaSession(songInfo) {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = 'playing';
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: songInfo.title,
+                artist: songInfo.artist,
+                album: songInfo.album,
+                artwork: [
+                    { src: 'data:image/png;base64,' + songInfo.image, type: 'image/png;base64' },
+                ]
+            });
+        }
     }
 
     updateTagField(selector, value) {
@@ -199,13 +198,8 @@
         }
     }
 
-    markCurrentlyPlayig() {
-        this.playlistBody.find('.table-primary').removeClass('table-primary');
-        this.playlistBody.find('#' + this.currentlyPlaying).addClass('table-primary');
-    }
-
     onFilterChange() {
-        var filter = this.playlistFilter.val();
+        var filter = this.playlistFilter.val().toLowerCase();
         if (filter === '') {
             this.fillPlaylistBody(this.playlist);
             return;
@@ -219,5 +213,35 @@
                 value.artist.toLowerCase().includes(filter);
         });
         this.fillPlaylistBody(this.filteredPlaylist);
+    }
+
+    fillPlaylistBody(data) {
+        this.playlistBody.empty();
+        data.forEach((song) => {
+            var row = '<tr id="' + song.id + '" class="song-row"><td>' + (song.id + 1) + '</td><td>' + song.title + '</td><td>' + song.artist +
+                '</td><td>' + song.album + '</td><td>' + formatSeconds(song.length) + '</td></tr>';
+            this.playlistBody.append(row)
+        });
+        this.attachRowActions();
+        this.markCurrentlyPlayig();
+    }
+
+    attachRowActions() {
+        var audioPlayer = this;
+        this.container.find('.song-row').click(function () {
+            var songId = Number.parseInt($(this)[0].id, 10);
+            audioPlayer.playSong(songId);
+        })
+    }
+
+    markCurrentlyPlayig() {
+        this.playlistBody.find('.table-primary').removeClass('table-primary');
+        this.playlistBody.find('#' + this.currentlyPlaying).addClass('table-primary');
+    }
+
+    setMediaSessionPlaybackState(state) {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = state;
+        }
     }
 }
