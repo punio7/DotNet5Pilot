@@ -21,16 +21,22 @@ namespace DotNet5Pilot.Logic.Managers
         public void LoadLyrics(SongInfo songInfo)
         {
             string lyricsPath = configuration.LyricsFolder;
-            if (string.IsNullOrEmpty(lyricsPath) || !Directory.Exists(lyricsPath))
+            if (string.IsNullOrEmpty(lyricsPath) || !Directory.Exists(lyricsPath) || string.IsNullOrEmpty(configuration.LyricsExtensions))
             {
                 return;
             }
-            string lyricsFilePath = $"{lyricsPath}\\{songInfo.Artist} - {songInfo.Title}.lrc";
-            if (!File.Exists(lyricsFilePath))
+            string artist = songInfo.Artist.Replace('/', '_');
+            string title = songInfo.Title.Replace('/', '_');
+
+            foreach (string lyricsExtension in configuration.LyricsExstensionsArray)
             {
-                return;
+                string lyricsFilePath = $"{lyricsPath}/{artist} - {title}.{lyricsExtension}";
+                if (File.Exists(lyricsFilePath))
+                {
+                    songInfo.Lyrics = ParseLyrics(lyricsFilePath);
+                    return;
+                }
             }
-            songInfo.Lyrics = ParseLyrics(lyricsFilePath);
         }
 
         private static Lyric[] ParseLyrics(string lyricsFilePath)

@@ -40,7 +40,7 @@ namespace DotNet5Pilot.Logic.Managers
             {
                 if (acceptableExtensions.Contains(file.Extension.ToLower()))
                 {
-                    var songInfo = songInfoFactory.CreateShortSongInfo(file.FullName);
+                    var songInfo = songInfoFactory.CreateShortSongInfo(file.FullName, 0);
                     newPlaylist.Add(songInfo);
                 }
             }
@@ -85,7 +85,7 @@ namespace DotNet5Pilot.Logic.Managers
             {
                 return songInfo;
             }
-            SongInfo newSongInfo = songInfoFactory.CreateSongInfo(Playlist[songId].Path);
+            SongInfo newSongInfo = songInfoFactory.CreateSongInfo(Playlist[songId].Path, songId);
             lyricsManager.LoadLyrics(newSongInfo);
             return songInfoCache.AddOrGetExisting(songId, newSongInfo);
         }

@@ -50,3 +50,7 @@
     background-color: #007bff;
     color: white;
 }
+
+.progress {
+    cursor: pointer;
+}

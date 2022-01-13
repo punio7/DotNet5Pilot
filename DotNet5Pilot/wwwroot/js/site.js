@@ -5,6 +5,7 @@
 
 
 function formatSeconds(totalSeconds) {
+    totalSeconds = Math.floor(totalSeconds);
     var minutes = Math.floor(totalSeconds / 60);
     var seconds = (totalSeconds % 60)
     if (seconds < 10) {

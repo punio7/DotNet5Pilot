@@ -6,5 +6,7 @@
 
         public string DefaultFolder { get; set; }
         public string LyricsFolder { get; set; }
+        public string LyricsExtensions { get; set; }
+        public string[] LyricsExstensionsArray => LyricsExtensions.Split(';');
     }
 }

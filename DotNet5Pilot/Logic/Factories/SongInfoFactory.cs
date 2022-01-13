@@ -16,24 +16,28 @@ namespace DotNet5Pilot.Logic.Factories
             Album = string.Empty,
             Year = null,
             Genere = string.Empty,
-            Image = System.IO.File.ReadAllBytes(@"wwwroot\images\noImage.png"),
+            Image = System.IO.File.ReadAllBytes(@"wwwroot/images/noImage.png"),
             ImageMimeType = "image/png",
+            ImageUrl = SongImageUrl(-1),
             Length = 0,
         };
 
-        public SongInfo CreateSongInfo(string fileFullName)
+        public SongInfo CreateSongInfo(string fileFullName, int songId)
         {
             SongInfo songInfo = new();
             using File tagFile = GetFileTag(fileFullName);
-            FillShortInfo(fileFullName, songInfo, tagFile);
+            FillShortInfo(fileFullName, songInfo, tagFile, songId);
             songInfo.Track = tagFile.Tag.Track != default ? tagFile.Tag.Track : null;
             songInfo.Year = tagFile.Tag.Year != default ? tagFile.Tag.Year : null;
             songInfo.Genere = tagFile.Tag.JoinedGenres;
             var picture = SelectPictureFromArray(tagFile.Tag.Pictures);
             ProcessSongPicture(songInfo, picture);
+            songInfo.ImageUrl = SongImageUrl(songId);
 
             return songInfo;
         }
+
+        private static string SongImageUrl(int songId) => $"/PilotStream/Image/{songId}";
 
         static IPicture SelectPictureFromArray(IPicture[] pictureArray)
         {
@@ -66,11 +70,11 @@ namespace DotNet5Pilot.Logic.Factories
             }
         }
 
-        public SongShortInfo CreateShortSongInfo(string fileFullName)
+        public SongShortInfo CreateShortSongInfo(string fileFullName, int songId)
         {
             SongShortInfo shortInfo = new();
             using File tagFile = GetFileTag(fileFullName);
-            FillShortInfo(fileFullName, shortInfo, tagFile);
+            FillShortInfo(fileFullName, shortInfo, tagFile, songId);
 
             return shortInfo;
         }
@@ -80,10 +84,11 @@ namespace DotNet5Pilot.Logic.Factories
             return File.Create(new LocalFileAbstraction(fileFullName));
         }
 
-        private static void FillShortInfo(string fileFullName, SongShortInfo shortInfo, File tagFile)
+        private static void FillShortInfo(string fileFullName, SongShortInfo shortInfo, File tagFile, int songId)
         {
             shortInfo.Path = fileFullName;
             shortInfo.Title = GetTitle(tagFile);
+            shortInfo.Id = songId;
             if (tagFile.Tag != null)
             {
                 shortInfo.Album = GetAlbum(tagFile);
@@ -118,7 +123,7 @@ namespace DotNet5Pilot.Logic.Factories
             }
             else if (tagFile.Tag.AlbumArtists.Any())
             {
-                return string.Join(",", tagFile.Tag.AlbumArtists);
+                return string.Join("", tagFile.Tag.AlbumArtists);
             }
             else
             {

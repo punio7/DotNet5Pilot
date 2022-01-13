@@ -22,6 +22,9 @@
         this.songYear = $('#songYear');
         this.songGenere = $('#songGenere');
         this.songImage = $('#songImage');
+        this.progress = $('#progress');
+        this.progressBar = $('#progressBar');
+        this.timeProgress = $('#timeProgress');
 
         this.karaoke = new karaoke('#karaokeBox');
 
@@ -42,12 +45,14 @@
         this.playlistFilter.on('input', () => { this.onFilterChange(); });
         this.audio.on('seeked', () => { this.onAudioSeeked(); });
         this.audio.on('ended', () => { this.next(); });
+        this.audio.on('timeupdate', () => { this.updateProgress(); })
         this.playButton.click(() => this.playPause());
         this.prevButton.click(() => this.playPrevious());
         this.nextButton.click(() => this.playNext());
         this.stopButton.click(() => this.stopPlaying());
         this.repeatButton.click(() => this.toggleRepeat());
         this.randomButton.click(() => this.toggleRandom());
+        this.progress.click((event) => this.progressSeek(event));
     }
 
     loadPlaylist(data) {
@@ -59,12 +64,12 @@
         if (this.audioDom.paused) {
             this.audioDom.play();
             this.karaoke.start(this.audioDom.currentTime * 1000);
-            this.setMediaSessionPlaybackState('pause');
+            this.setMediaSessionPlaybackState('paused');
         }
         else {
             this.audioDom.pause();
             this.karaoke.stop();
-            this.setMediaSessionPlaybackState('play');
+            this.setMediaSessionPlaybackState('playing');
         }
     }
 
@@ -169,7 +174,7 @@
         this.updateTagField(this.songTrack, songInfo.track);
         this.updateTagField(this.songYear, songInfo.year);
         this.updateTagField(this.songGenere, songInfo.genere);
-        this.songImage.attr('src', 'data:image/png;base64,' + songInfo.image);
+        this.songImage.attr('src', songInfo.imageUrl);
         this.updateMediaSession(songInfo);
     }
 
@@ -181,7 +186,7 @@
                 artist: songInfo.artist,
                 album: songInfo.album,
                 artwork: [
-                    { src: 'data:image/png;base64,' + songInfo.image, type: 'image/png;base64' },
+                    { src: window.location.origin + songInfo.imageUrl, type: songInfo.imageMimeType },
                 ]
             });
         }
@@ -243,5 +248,27 @@
         if ('mediaSession' in navigator) {
             navigator.mediaSession.playbackState = state;
         }
+    }
+
+    updateProgress() {
+        var percentage = (this.audioDom.currentTime / this.audioDom.duration) * 100;
+        if (isNaN(percentage)) {
+            percentage = 0;
+        }
+        this.progressBar.css('width', percentage + '%');
+        this.progressBar.attr('aria-valuenow', percentage);
+        var duration = isNaN(this.audioDom.duration) ? 0 : this.audioDom.duration;
+        this.timeProgress.text(formatSeconds(this.audioDom.currentTime) + ' / ' + formatSeconds(duration))
+    }
+
+    progressSeek(clickEvent) {
+        if (this.stopped || isNaN(this.audioDom.currentTime) || isNaN(this.audioDom.duration)) {
+            return;
+        }
+        var progressRectangle = this.progress[0].getBoundingClientRect();
+        var startX = progressRectangle.x;
+        var clickedX = clickEvent.pageX;
+        var percentage = (clickedX - startX) / progressRectangle.width;
+        this.audioDom.currentTime = this.audioDom.duration * percentage;
     }
 }

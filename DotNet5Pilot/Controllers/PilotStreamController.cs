@@ -1,4 +1,5 @@
 ﻿using DotNet5Pilot.Logic.Managers;
+using DotNet5Pilot.Models.Song;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNet5Pilot.Controllers
@@ -24,8 +25,14 @@ namespace DotNet5Pilot.Controllers
 
         public IActionResult Info(int id)
         {
-            var songInfo = playlistManager.GetSongInfo(id);
+            SongInfo songInfo = playlistManager.GetSongInfo(id);
             return Json(songInfo);
+        }
+
+        public IActionResult Image(int id)
+        {
+            SongInfo songInfo = playlistManager.GetSongInfo(id);
+            return File(songInfo.Image, songInfo.ImageMimeType);
         }
     }
 }

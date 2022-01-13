@@ -1,0 +1,1 @@
+scp -r publish/* pi@raspberrypi:/home/pi/pilot
