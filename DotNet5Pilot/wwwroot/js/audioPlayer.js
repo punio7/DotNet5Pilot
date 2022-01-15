@@ -26,7 +26,8 @@
         this.progressBar = $('#progressBar');
         this.timeProgress = $('#timeProgress');
 
-        this.karaoke = new karaoke('#karaokeBox');
+        this.karaoke = new karaoke('#karaokePanel');
+        this.karaokeBackground = $('#karaokeBackground');
 
         this.playlist = [];
         this.filteredPlaylist = [];
@@ -175,6 +176,7 @@
         this.updateTagField(this.songYear, songInfo.year);
         this.updateTagField(this.songGenere, songInfo.genere);
         this.songImage.attr('src', songInfo.imageUrl);
+        this.karaokeBackground.css('background-image', 'url("' + songInfo.imageUrl + '")');
         this.updateMediaSession(songInfo);
     }
 

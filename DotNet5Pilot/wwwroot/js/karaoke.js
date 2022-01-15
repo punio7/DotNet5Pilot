@@ -1,5 +1,6 @@
 ﻿class karaoke {
-    constructor(karaokeBoxSelector) {
+    constructor(karaokePanelSelector) {
+        this.karaokePanel = $(karaokePanelSelector);
         this.karaokeBox = $('#karaokeBox');
         this.timeout = null;
         this.currentLine = -1;
@@ -10,14 +11,16 @@
 
     load(lyrics) {
         this.karaokeBox.empty();
-        $('#songImage').removeClass('karaoke-background');
         this.lyrics = lyrics;
         if (lyrics != null) {
-            $('#songImage').addClass('karaoke-background');
+            this.karaokePanel.show(500);
             this.karaokeBox.append('<div style="height:112px;">&nbsp;</div>');
             this.lyrics.forEach((lyric) => {
                 this.karaokeBox.append('<div>' + lyric.text + '</div>');
             })
+        }
+        else {
+            this.karaokePanel.hide(500);
         }
     }
 
@@ -75,7 +78,7 @@
         this.karaokeBox.find('.karaoke-current-line').removeClass('karaoke-current-line');
         var currentLineElement = $('#karaokeBox div:nth-child(' + (newLine + 2) + ')');
         currentLineElement.addClass('karaoke-current-line');
-        var newPosition = currentLineElement[0].offsetTop - 112;
+        var newPosition = currentLineElement[0].offsetTop - 125 + (currentLineElement[0].clientHeight / 2);
         if (nextLineTime > 2000) {
             this.scroll(newPosition, 1000);
         }

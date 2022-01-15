@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using DotNet5Pilot.Models.Configuration;
 using DotNet5Pilot.Models.Song;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace DotNet5Pilot.Logic.Managers
@@ -11,11 +12,13 @@ namespace DotNet5Pilot.Logic.Managers
     public class LyricsManager
     {
         private readonly PilotConfiguration configuration;
+        private readonly ILogger logger;
         private const string _nonBreakingSpace = "&nbsp;";
 
-        public LyricsManager(IOptions<PilotConfiguration> configuration)
+        public LyricsManager(IOptions<PilotConfiguration> configuration, ILogger<LyricsManager> logger)
         {
             this.configuration = configuration.Value;
+            this.logger = logger;
         }
 
         public void LoadLyrics(SongInfo songInfo)
@@ -28,15 +31,16 @@ namespace DotNet5Pilot.Logic.Managers
             string artist = songInfo.Artist.Replace('/', '_');
             string title = songInfo.Title.Replace('/', '_');
 
-            foreach (string lyricsExtension in configuration.LyricsExstensionsArray)
+            var lyricsPaths = configuration.LyricsExstensionsArray.Select(lyricsExtension => $"{lyricsPath}/{artist} - {title}.{lyricsExtension}");
+            foreach (string lyricsFilePath in lyricsPaths)
             {
-                string lyricsFilePath = $"{lyricsPath}/{artist} - {title}.{lyricsExtension}";
                 if (File.Exists(lyricsFilePath))
                 {
                     songInfo.Lyrics = ParseLyrics(lyricsFilePath);
                     return;
                 }
             }
+            logger.LogInformation($"Lyrics for {title} not found. Searched paths: {Environment.NewLine}{string.Join(Environment.NewLine, lyricsPaths)}");
         }
 
         private static Lyric[] ParseLyrics(string lyricsFilePath)
