@@ -26,8 +26,8 @@
 
     start(startingMilliseconds = 0) {
         if (this.lyrics != null) {
-            var startingLine = this.findStartingLyric(startingMilliseconds);
-            var milliseconds = this.lyrics[startingLine + 1].milliseconds - startingMilliseconds;
+            let startingLine = this.findStartingLyric(startingMilliseconds);
+            let milliseconds = this.lyrics[startingLine + 1].milliseconds - startingMilliseconds;
             if (startingLine > 0 && startingLine !== this.currentLine) {
                 this.goToLine(startingLine, milliseconds);
             }
@@ -60,9 +60,9 @@
             return;
         }
         this.currentLine++;
-        var nextLineExists = this.currentLine + 1 < this.lyrics.length;
+        let nextLineExists = this.currentLine + 1 < this.lyrics.length;
 
-        var millisecondsDifference = nextLineExists ?
+        let millisecondsDifference = nextLineExists ?
             this.lyrics[this.currentLine + 1].milliseconds - this.lyrics[this.currentLine].milliseconds : 2000;
         if (nextLineExists) {
             this.queueNextLine(millisecondsDifference);
@@ -76,9 +76,9 @@
 
     goToLine(newLine, nextLineTime) {
         this.karaokeBox.find('.karaoke-current-line').removeClass('karaoke-current-line');
-        var currentLineElement = $('#karaokeBox div:nth-child(' + (newLine + 2) + ')');
+        let currentLineElement = $('#karaokeBox div:nth-child(' + (newLine + 2) + ')');
         currentLineElement.addClass('karaoke-current-line');
-        var newPosition = currentLineElement[0].offsetTop - 125 + (currentLineElement[0].clientHeight / 2);
+        let newPosition = currentLineElement[0].offsetTop - 125 + (currentLineElement[0].clientHeight / 2);
         if (nextLineTime > 2000) {
             this.scroll(newPosition, 1000);
         }

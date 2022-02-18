@@ -63,6 +63,78 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
+    background-color: #202124;
+    color: var(--light);
+}
+
+.card {
+    background-color: #202124;
+    border: 1px solid var(--gray);
+}
+
+.card-header {
+    background-color: darkslateblue;
+}
+
+.table {
+    color: var(--light);
+}
+
+.table-hover tbody tr:hover {
+    color: var(--white);
+    background-color: var(--gray);
+}
+
+.table-hover .table-primary:hover, .table-hover .table-primary:hover > td {
+    color: var(--white);
+    background-color: mediumslateblue;
+}
+
+.table-primary, .table-primary td {
+    background-color: darkslateblue;
+}
+
+.form-control, .form-control[readonly] {
+    color: var(--light);
+    background-color: var(--dark);
+}
+
+.input-group-text {
+    background-color: darkslateblue;
+    color: var(--light);
+}
+
+.form-control, .form-control[readonly], .input-group-text {
+    border: 1px solid black;
+}
+
+    .form-control::placeholder {
+        color: var(--light);
+        opacity: 1;
+    }
+
+.btn-outline-primary {
+    color: mediumslateblue;
+    border-color: mediumslateblue;
+}
+
+    .btn-outline-primary:hover, .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show > .btn-outline-primary.dropdown-toggle {
+        color: #fff;
+        background-color: mediumslateblue;
+        border-color: mediumslateblue;
+    }
+
+    .btn-outline-primary.focus, .btn-outline-primary:focus {
+        box-shadow: 0 0 0 0.2rem rgb(123 104 238 / 50%);
+    }
+
+.progress {
+    background-color: var(--gray);
+}
+
+.progress-bar {
+    background-color: darkslateblue;
 }
 
 .footer {
