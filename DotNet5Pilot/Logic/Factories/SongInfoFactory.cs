@@ -27,7 +27,6 @@ namespace DotNet5Pilot.Logic.Factories
             SongInfo songInfo = new();
             using File tagFile = GetFileTag(fileFullName);
             FillShortInfo(fileFullName, songInfo, tagFile, songId);
-            songInfo.Track = tagFile.Tag.Track != default ? tagFile.Tag.Track : null;
             songInfo.Year = tagFile.Tag.Year != default ? tagFile.Tag.Year : null;
             songInfo.Genere = tagFile.Tag.JoinedGenres;
             var picture = SelectPictureFromArray(tagFile.Tag.Pictures);
@@ -92,6 +91,7 @@ namespace DotNet5Pilot.Logic.Factories
             if (tagFile.Tag != null)
             {
                 shortInfo.Album = GetAlbum(tagFile);
+                shortInfo.Track = tagFile.Tag.Track != default ? tagFile.Tag.Track : null;
                 shortInfo.Artist = GetAlbumArtist(tagFile);
                 shortInfo.Length = (int)tagFile.Properties.Duration.TotalSeconds;
             }

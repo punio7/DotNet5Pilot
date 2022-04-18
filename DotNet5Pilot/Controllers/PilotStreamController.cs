@@ -23,6 +23,21 @@ namespace DotNet5Pilot.Controllers
             return Json(playlistManager.Playlist);
         }
 
+        public IActionResult ListAlbums()
+        {
+            return Json(playlistManager.Albums);
+        }
+
+        [HttpPost]
+        public IActionResult LoadAlbum([FromRoute]int id)
+        {
+            if (playlistManager.LoadAlbum(id))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         public IActionResult Info(int id)
         {
             SongInfo songInfo = playlistManager.GetSongInfo(id);

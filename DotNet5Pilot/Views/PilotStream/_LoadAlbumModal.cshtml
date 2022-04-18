@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="modal fade" id="albumsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Wczytaj folder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="list-group" id="albumList">
+                    <button type="button" class="list-group-item d-flex justify-content-between align-items-center list-group-item-action">
+                        Folder 1
+                        <span class="badge badge-primary badge-pill">14</span>
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action">Folder 2</button>
+                    <button type="button" class="list-group-item list-group-item-action">Folder 3</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                <button id="loadAlbumSubmitButton" type="button" class="btn btn-primary">Wczytaj</button>
+            </div>
+        </div>
+    </div>
+</div>

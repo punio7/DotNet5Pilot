@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DotNet5Pilot.Logic.Factories;
 using DotNet5Pilot.Logic.Utils;
+using DotNet5Pilot.Models;
 using DotNet5Pilot.Models.Configuration;
 using DotNet5Pilot.Models.Song;
 using Microsoft.Extensions.Options;
@@ -18,6 +20,7 @@ namespace DotNet5Pilot.Logic.Managers
         private readonly Cache<int, SongInfo> songInfoCache = new();
 
         public List<SongShortInfo> Playlist { get; set; } = new();
+        public IEnumerable<AlbumInfo> Albums = Enumerable.Empty<AlbumInfo>();
 
         public PlaylistManager(SongInfoFactory songInfoFactory, LyricsManager lyricsManager, IOptions<PilotConfiguration> configuration)
         {
@@ -25,6 +28,7 @@ namespace DotNet5Pilot.Logic.Managers
             this.lyricsManager = lyricsManager;
             this.configuration = configuration.Value;
             LoadDefaultFolder();
+            LoadAlbums();
         }
 
         private void LoadDefaultFolder()
@@ -32,10 +36,31 @@ namespace DotNet5Pilot.Logic.Managers
             LoadFolder(configuration.DefaultFolder);
         }
 
+        private void LoadAlbums()
+        {
+            DirectoryInfo musicFolder = new(configuration.MusicFolder);
+            int id = 0;
+            Albums = musicFolder.EnumerateDirectories()
+                .OrderBy(d => d.Name)
+                .Select(d => new AlbumInfo(id++, d.Name, 
+                    d.EnumerateFiles().Count(f => acceptableExtensions.Contains(f.Extension))))
+                .ToList();
+        }
+
+        internal bool LoadAlbum(int id)
+        {
+            if (id < 0 || id > Albums.Count())
+            {
+                return false;
+            }
+            LoadFolder(Albums.ElementAt(id).Name);
+            return true;
+        }
+
         public void LoadFolder(string folder)
         {
             List<SongShortInfo> newPlaylist = new();
-            DirectoryInfo directoryInfo = new(folder);
+            DirectoryInfo directoryInfo = new(Path.Combine(configuration.MusicFolder, folder));
             foreach (var file in directoryInfo.EnumerateFiles())
             {
                 if (acceptableExtensions.Contains(file.Extension.ToLower()))
@@ -44,15 +69,15 @@ namespace DotNet5Pilot.Logic.Managers
                     newPlaylist.Add(songInfo);
                 }
             }
-            newPlaylist = SortPlaylistByTitle(newPlaylist);
+            newPlaylist = SortPlaylist(newPlaylist);
             EnumerateIds(newPlaylist);
             Playlist = newPlaylist;
             songInfoCache.Clear();
         }
 
-        private static List<SongShortInfo> SortPlaylistByTitle(List<SongShortInfo> playlist)
+        private static List<SongShortInfo> SortPlaylist(List<SongShortInfo> playlist)
         {
-            return playlist.OrderBy(si => si.Album).ThenBy(si => si.Title).ToList();
+            return playlist.OrderBy(si => si.Album).ThenBy(si => si.Track).ThenBy(si => si.Title).ToList();
         }
 
         private static void EnumerateIds(List<SongShortInfo> newPlaylist)

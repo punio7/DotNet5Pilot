@@ -7,7 +7,7 @@ namespace DotNet5Pilot.Models
         public LocalFileAbstraction(string path, bool openForWrite = false)
         {
             Name = Path.GetFileName(path);
-            var fileStream = openForWrite ? System.IO.File.Open(path, FileMode.Open, FileAccess.ReadWrite) : System.IO.File.OpenRead(path);
+            var fileStream = openForWrite ? File.Open(path, FileMode.Open, FileAccess.ReadWrite) : File.OpenRead(path);
             ReadStream = WriteStream = fileStream;
         }
 

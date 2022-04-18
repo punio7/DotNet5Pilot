@@ -96,6 +96,7 @@
     onPlay() {
         this.karaoke.start(this.audioDom.currentTime * 1000);
         this.setMediaSessionPlaybackState('playing');
+        this.progressBar.addClass('progress-bar-animated');
         this.showHidePlayPauseButtons(true);
     }
 
@@ -106,6 +107,7 @@
     onPause() {
         this.karaoke.stop();
         this.setMediaSessionPlaybackState('paused');
+        this.progressBar.removeClass('progress-bar-animated');
         this.showHidePlayPauseButtons(false);
     }
 
@@ -135,7 +137,7 @@
             let nextSongId = 0;
             do {
                 nextSongId = this.getRandomInt(0, this.playlist.length - 1);
-            } while (this.previousSongs.indexOf(nextSongId) !== -1);
+            } while (nextSongId !== this.currentlyPlaying && this.previousSongs.indexOf(nextSongId) !== -1);
             this.playSong(nextSongId);
         }
         else {

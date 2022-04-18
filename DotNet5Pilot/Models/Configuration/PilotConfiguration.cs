@@ -4,6 +4,7 @@
     {
         public const string SectionName = "Pilot";
 
+        public string MusicFolder { get; set; }
         public string DefaultFolder { get; set; }
         public string LyricsFolder { get; set; }
         public string LyricsExtensions { get; set; }

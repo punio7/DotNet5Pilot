@@ -16,9 +16,13 @@
 
 $(document).ready(() => {
     player = new audioPlayer('#audioPlayer');
+    reloadPlaylist();
+});
+
+function reloadPlaylist() {
     ajaxAction('Info/-1', (data) => { player.emptySong = data; player.stopPlaying() });
     ajaxAction('List', (data) => { player.loadPlaylist(data) });
-});
+}
 
 function ajaxAction(actionName, callback) {
     var ajaxOptions = {
