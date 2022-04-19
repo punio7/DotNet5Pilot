@@ -4,7 +4,9 @@ var modalQuery = $('#albumsModal');
 $(document).ready(() => {
     modalQuery.modal({ show: false });
     $('#loadAlbumButton').click(() => {
-        ajaxAction('ListAlbums', (albums) => { loadAlbums(albums); })
+        ajaxAction('ListAlbums', (albums) => {
+            loadAlbums(albums);
+        })
     });
     $('#loadAlbumSubmitButton').click(() => loadAlbumSubmit());
 });

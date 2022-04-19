@@ -84,13 +84,17 @@
     <div class="row">&nbsp;</div>
     <div id="accordion" class="row">
         <div class="card" style="width: 100%">
-            <div class="card-header" id="playlistHeading" data-toggle="collapse" data-target="#playlistContainer" aria-expanded="true" aria-controls="playlistContainer">
-                <span class="mb-0">
-                    Playlista
-                </span>
-                <button type="button" id="loadAlbumButton" class="btn btn-primary float-right" data-toggle="modal" data-target="#playlistModal">
-                    Wczytaj folder
-                </button>
+            <div class="card-header container" id="playlistHeading">
+                <div class="row">
+                    <div class="col-7 col-md-9 col-xl-10" data-toggle="collapse" data-target="#playlistContainer" aria-expanded="true" aria-controls="playlistContainer">
+                        <h3>Playlista</h3>
+                    </div>
+                    <div class="col-5 col-md-3 col-xl-2">
+                        <button type="button" id="loadAlbumButton" class="btn btn-primary float-right">
+                            Wczytaj folder
+                        </button>
+                    </div>
+                </div>
             </div>
             <div id="playlistContainer" class="collapse show" aria-labelledby="playlistHeading" data-parent="#accordion">
                 <div class="card-body">
