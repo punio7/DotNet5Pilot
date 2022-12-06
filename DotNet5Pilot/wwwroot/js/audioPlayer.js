@@ -83,6 +83,7 @@
 
     loadPlaylist(data) {
         this.playlist = data;
+        this.previousSongs = [];
         this.fillPlaylistBody(data);
     }
 
@@ -137,7 +138,7 @@
             let nextSongId = 0;
             do {
                 nextSongId = this.getRandomInt(0, this.playlist.length - 1);
-            } while (nextSongId !== this.currentlyPlaying && this.previousSongs.indexOf(nextSongId) !== -1);
+            } while (nextSongId == this.currentlyPlaying || this.previousSongs.indexOf(nextSongId) !== -1);
             this.playSong(nextSongId);
         }
         else {
@@ -221,7 +222,8 @@
 
     playSong(songId) {
         this.previousSongs.push(this.currentlyPlaying);
-        this.previousSongs = this.previousSongs.slice(-30);
+        let randomSongsMemeory = Math.min(30, this.playlist.length / 2);
+        this.previousSongs = this.previousSongs.slice(-randomSongsMemeory);
         this.currentlyPlaying = songId;
         this.stopped = false;
         this.audioDom.pause();
