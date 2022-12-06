@@ -30,8 +30,14 @@ namespace DotNet5Pilot.Logic.Managers
             }
             string artist = songInfo.Artist.Replace('/', '_');
             string title = songInfo.Title.Replace('/', '_');
+            string fileName = $"{artist} - {title}";
+            foreach (char invalidChar in Path.GetInvalidFileNameChars().Concat(new[] { '"', ':' }))
+            {
+                fileName = fileName.Replace(invalidChar, '_');
+            }
 
-            var lyricsPaths = configuration.LyricsExstensionsArray.Select(lyricsExtension => $"{lyricsPath}/{artist} - {title}.{lyricsExtension}");
+            var lyricsPaths = configuration.LyricsExstensionsArray
+                .Select(lyricsExtension => Path.Combine(lyricsPath, $"{fileName}.{lyricsExtension}"));
             foreach (string lyricsFilePath in lyricsPaths)
             {
                 if (File.Exists(lyricsFilePath))
