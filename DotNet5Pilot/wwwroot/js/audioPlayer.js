@@ -33,6 +33,8 @@
         this.karaoke = new karaoke('#karaokePanel');
         this.karaokeBackground = $('#karaokeBackground');
 
+        this.equalizer = new equalizer(this.audioDom);
+
         this.playlist = [];
         this.filteredPlaylist = [];
         this.previousSongs = [];
@@ -221,6 +223,8 @@
     }
 
     playSong(songId) {
+        // Audio context needs a kick from user interaction, due to Chrome anti autoplay policy
+        this.equalizer.audioContext.resume();
         this.previousSongs.push(this.currentlyPlaying);
         let randomSongsMemeory = Math.min(30, this.playlist.length / 2);
         this.previousSongs = this.previousSongs.slice(-randomSongsMemeory);
