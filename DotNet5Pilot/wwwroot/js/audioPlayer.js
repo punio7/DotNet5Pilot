@@ -18,6 +18,7 @@
         this.stopButton = $('#stopButton');
         this.repeatButton = $('#repeatButton');
         this.randomButton = $('#randomButton');
+        this.controlsSongTitle = $('#controlsSongTitle');
 
         this.songTitle = $('#songTitle');
         this.songArtist = $('#songArtist');
@@ -257,6 +258,7 @@
         this.updateTagField(this.songTrack, songInfo.track);
         this.updateTagField(this.songYear, songInfo.year);
         this.updateTagField(this.songGenere, songInfo.genere);
+        this.controlsSongTitle.text(songInfo.artist + ' - ' + songInfo.title)
         this.songImage.attr('src', songInfo.imageUrl);
         this.karaokeBackground.css('background-image', 'url("' + songInfo.imageUrl + '")');
         this.updateMediaSession(songInfo);
