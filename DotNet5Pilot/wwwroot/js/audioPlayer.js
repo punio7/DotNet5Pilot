@@ -258,7 +258,7 @@
         this.updateTagField(this.songTrack, songInfo.track);
         this.updateTagField(this.songYear, songInfo.year);
         this.updateTagField(this.songGenere, songInfo.genere);
-        this.controlsSongTitle.text(songInfo.artist + ' - ' + songInfo.title)
+        this.controlsSongTitle.text(songInfo.title)
         this.songImage.attr('src', songInfo.imageUrl);
         this.karaokeBackground.css('background-image', 'url("' + songInfo.imageUrl + '")');
         this.updateMediaSession(songInfo);
