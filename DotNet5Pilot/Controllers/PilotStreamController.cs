@@ -1,16 +1,20 @@
 ﻿using DotNet5Pilot.Logic.Managers;
+using DotNet5Pilot.Models;
 using DotNet5Pilot.Models.Song;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DotNet5Pilot.Controllers
 {
     public class PilotStreamController : Controller
     {
         private readonly PlaylistManager playlistManager;
+        private readonly ILogger logger;
 
-        public PilotStreamController(PlaylistManager playlistManager)
+        public PilotStreamController(PlaylistManager playlistManager, ILogger<LyricsManager> logger)
         {
             this.playlistManager = playlistManager;
+            this.logger = logger;
         }
 
         public IActionResult Index()
@@ -48,6 +52,13 @@ namespace DotNet5Pilot.Controllers
         {
             SongInfo songInfo = playlistManager.GetSongInfo(id);
             return File(songInfo.Image, songInfo.ImageMimeType);
+        }
+
+        [HttpPost]
+        public IActionResult LogError([FromBody]ErrorInfo errorInfo)
+        {
+            logger.LogInformation(message: "Frontend error: {errorInfo}", errorInfo);
+            return Ok();
         }
     }
 }

@@ -46,7 +46,8 @@ namespace DotNet5Pilot.Logic.Managers
                     return;
                 }
             }
-            logger.LogInformation($"Lyrics for {title} not found. Searched paths: {Environment.NewLine}{string.Join(Environment.NewLine, lyricsPaths)}");
+            string paths = Environment.NewLine + string.Join(Environment.NewLine, lyricsPaths);
+            logger.LogInformation("Lyrics for {title} not found. Searched paths: {paths}", title, paths);
         }
 
         private static Lyric[] ParseLyrics(string lyricsFilePath)

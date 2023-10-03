@@ -26,7 +26,7 @@ function reloadPlaylist() {
 
 function ajaxAction(actionName, callback) {
     var ajaxOptions = {
-        url: '/PilotStream/' + actionName
+        url: '/PilotStream/' + actionName,
     };
     if (callback !== undefined) {
         ajaxOptions.success = callback;
@@ -40,4 +40,26 @@ function ajaxAction(actionName, callback) {
 
 function ajaxOnSuccess(value) {
     console.info('ajax action: ' + value);
+}
+
+window.onerror = (event, source, lineno, colno, error) => {
+    var ajaxOptions = {
+        url: '/PilotStream/LogError',
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            event: event,
+            source: source,
+            lineNo: lineno,
+            colno: colno,
+            error: error
+        })
+    };
+
+    $.ajax(ajaxOptions);
+};
+
+function testerror() {
+    throw 'Błueeee';
 }

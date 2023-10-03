@@ -54,10 +54,11 @@
 
     attachActions() {
         this.playlistFilter.on('input', () => { this.onFilterChange(); });
-        this.audio.on('seeked', () => { this.onAudioSeeked(); });
         this.audio.on('ended', () => { this.next(); });
         this.audio.on('timeupdate', () => { this.updateProgress(); })
         this.audio.on('play', () => { this.onPlay(); })
+        this.audio.on('playing', () => { this.onPlaying(); })
+        this.audio.on('waiting', () => { this.onWaiting(); })
         this.audio.on('pause', () => { this.onPause(); })
         this.playButton.click(() => this.play());
         this.pauseButton.click(() => this.pause());
@@ -98,10 +99,19 @@
     }
 
     onPlay() {
-        this.karaoke.start(this.audioDom.currentTime * 1000);
+        //this.karaoke.start(this.audioDom.currentTime * 1000);
         this.setMediaSessionPlaybackState('playing');
         this.progressBar.addClass('progress-bar-animated');
         this.showHidePlayPauseButtons(true);
+    }
+
+    onPlaying() {
+        this.karaoke.stop();
+        this.karaoke.start(this.audioDom.currentTime * 1000);
+    }
+
+    onWaiting() {
+        this.karaoke.stop();
     }
 
     pause() {
@@ -238,16 +248,10 @@
             this.loadSongInfo(data);
             this.karaoke.reset();
             this.audioDom.play();
-            //this.karaoke.start();
             this.markCurrentlyPlayig();
             document.title = data.title + ' - DotNet5Pilot';
         });
         this.requestWakeLock();
-    }
-
-    onAudioSeeked() {
-        this.karaoke.stop();
-        this.karaoke.start(this.audioDom.currentTime * 1000);
     }
 
     loadSongInfo(songInfo) {
