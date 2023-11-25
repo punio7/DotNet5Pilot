@@ -2,8 +2,7 @@
     constructor(audioPlayerSelector) {
         this.container = $(audioPlayerSelector);
         this.audio = $(audioPlayerSelector + ' audio');
-        this.audioDom = this.audio[0];
-        this.audioSource = $(audioPlayerSelector + ' audio source');
+        this.createAudio();
         this.playlistBody = $(audioPlayerSelector + ' .playlist-body');
         this.playlistFilter = $(audioPlayerSelector + ' .playlist-filter');
 
@@ -34,8 +33,6 @@
         this.karaoke = new karaoke('#karaokePanel');
         this.karaokeBackground = $('#karaokeBackground');
 
-        this.equalizer = new equalizer(this.audioDom);
-
         this.playlist = [];
         this.filteredPlaylist = [];
         this.previousSongs = [];
@@ -52,14 +49,28 @@
         this.attachMediaSessionActions();
     }
 
-    attachActions() {
-        this.playlistFilter.on('input', () => { this.onFilterChange(); });
+    createAudio() {
+        this.audio.off();
+        this.audio.remove();
+        this.audio = $('<audio><source src="" type="audio/mpeg">Your browser does not support the audio element.</audio>')
+        this.audioSource = this.audio.children('source');
+        this.container.append(this.audio);
+        this.audioDom = this.audio[0];
+        this.equalizer = new equalizer(this.audioDom);
+        this.atachAudioEvents();
+    }
+
+    atachAudioEvents() {
         this.audio.on('ended', () => { this.next(); });
         this.audio.on('timeupdate', () => { this.updateProgress(); })
         this.audio.on('play', () => { this.onPlay(); })
         this.audio.on('playing', () => { this.onPlaying(); })
         this.audio.on('waiting', () => { this.onWaiting(); })
         this.audio.on('pause', () => { this.onPause(); })
+    }
+
+    attachActions() {
+        this.playlistFilter.on('input', () => { this.onFilterChange(); });
         this.playButton.click(() => this.play());
         this.pauseButton.click(() => this.pause());
         this.prevButton.click(() => this.playPrevious());
@@ -234,8 +245,13 @@
     }
 
     playSong(songId) {
-        // Audio context needs a kick from user interaction, due to Chrome anti autoplay policy
-        this.equalizer.audioContext.resume();
+        if (this.equalizer.audioContext.state === "closed") {
+            this.createAudio();
+        }
+        if (this.equalizer.audioContext.state === "suspended") {
+            // Audio context needs a kick from user interaction, due to Chrome anti autoplay policy
+            this.equalizer.audioContext.resume();
+        }
         this.previousSongs.push(this.currentlyPlaying);
         let randomSongsMemeory = Math.min(30, this.playlist.length / 2);
         this.previousSongs = this.previousSongs.slice(-randomSongsMemeory);
